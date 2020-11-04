@@ -59,6 +59,12 @@ $.getJSON('src/files.json')
           format.files[attr]['continuous'] ? slider_options(q, attr, node[attr]) : dropdown_options(q, attr, node[attr])
         }
       })
+
+      // console.log(format.files['editText'],q.name);
+      // if (format.files['editText'] == 'enter'){
+      //   enter_Text(q, 'speechbubbles', node[attr])
+      // }
+
       dropdown_options(q, 'ext', ['svg', 'png'])
       dropdown_options(q, 'mirror', { '': '', 'mirror': '1' })
       $('.comicgen-attrs .wip').remove()
@@ -160,12 +166,17 @@ function dropdown_options(q, key, data) {
   data = _.isArray(data) ? data : _.keys(data)
   // If q[key] is not in data, pick the first item from the data list/dict
   q[key] = q[key] && data.indexOf(q[key]) > 0 ? q[key] : data[0]
+
   var options = data.map(function (v) { return '<option>' + v + '</option>' }).join('')
   var $el = $('.comicgen-attrs .attr.input[name="' + key + '"]').removeClass('wip')
   if (!$el.length) {
     $el = $('<div>').addClass('attr input mr-2 mb-2').attr('name', key)
     $el.append($(template_arrows({ key: key })))
-    $el.append($('<select>').addClass('form-control').attr('name', key))
+    if(key == 'editText'){
+      $el.append("<input type='text' class='form-control edit-text'/>").attr('name', key)
+    }else{
+      $el.append($('<select>').addClass('form-control').attr('name', key))
+    }
     var $after = $('.comicgen-attrs .attr:not(.wip):last')
     if ($after.length)
       $el.insertAfter($after)
@@ -174,6 +185,20 @@ function dropdown_options(q, key, data) {
   }
   $el.find('select').html(options).val(q[key])
 }
+
+// function enter_Text(q, key, data){
+//   console.log($('.comicgen-attrs .attr.input'))
+//   var $el = $('.comicgen-attrs .attr.slider[name="' + key + '"]').removeClass('wip')
+//   if (!$el.length) {
+//     $el = $('<div>').addClass('attr slider mr-2 mb-2').attr('name', key)
+//     $el.append("<input type='text'/>").attr('name', key)
+//     var $after = $('.comicgen-attrs .attr:not(.wip):last')
+//     if ($after.length)
+//       $el.insertAfter($after)
+//     else
+//       $el.appendTo('.comicgen-attrs')
+//   }
+// }
 
 function slider_options(q, key, data) {
   q[key] = isNaN(q[key]) ? 0 : +q[key]

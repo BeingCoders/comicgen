@@ -17,6 +17,11 @@
     "pose": [
       "handsinpocket",
       "handsfolded"
+    ],
+    "scale": [
+      "body",
+      "face",
+      "bust"
     ]
   },
   "ava": {
